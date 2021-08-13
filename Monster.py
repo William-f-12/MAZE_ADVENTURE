@@ -15,6 +15,7 @@ class Monster:
         self._notice_range = m_info["notice_range"]
         self._range_rect = self._notice_range.get_rect()
         self._range_rect.topleft = m_info["range_pos"]
+        self.go_back = True
 
 
     def move(self, character):
@@ -30,12 +31,14 @@ class Monster:
                 self.rect.top += self.speed * factor
         # if player not in attack range, back to inital position
         else:
-            if self.rect.left != self.inital_pos[0]:
-                factor = (self.inital_pos[0]-self.rect.left)/abs(self.inital_pos[0]-self.rect.left)
-                self.rect.left += self.speed * factor
-            if self.rect.top != self.inital_pos[1]:
-                factor = (self.inital_pos[1]-self.rect.top)/abs(self.inital_pos[1]-self.rect.top)
-                self.rect.top += self.speed * factor
+            # unless...
+            if self.go_back:
+                if self.rect.left != self.inital_pos[0]:
+                    factor = (self.inital_pos[0]-self.rect.left)/abs(self.inital_pos[0]-self.rect.left)
+                    self.rect.left += self.speed * factor
+                if self.rect.top != self.inital_pos[1]:
+                    factor = (self.inital_pos[1]-self.rect.top)/abs(self.inital_pos[1]-self.rect.top)
+                    self.rect.top += self.speed * factor
 
 
     def attack(self, character):

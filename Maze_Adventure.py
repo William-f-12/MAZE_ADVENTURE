@@ -8,6 +8,7 @@ pygame.init()
 from Timer import Timer
 from Buff import Dizzy
 from Heiwu import Heiwu
+from Statue import Statue
 from Chest import Chest, chests_list
 from Maze import Maze, maze_list1
 from Character import Character, wizard
@@ -61,6 +62,9 @@ def play():
               Chest(chests_list[1]),
               Chest(chests_list[2]),
               Chest(chests_list[3])]
+    # statue
+    statue_pos = (736,128)
+    statue = Statue(statue_pos)
     # npc
     npc = NPC(npc_info)
     # items
@@ -133,6 +137,8 @@ def play():
                 chest.check(character, buff_pos_list[buff_pos_idx])
                 if chest._buff.img:
                     buff_pos_idx += 1
+        # check statue
+        statue.update(DISPLAYSURF, collide_time, monsters, character)
         # check npc
         npc.react(character)
         # check items
@@ -150,6 +156,7 @@ def play():
 
         ## draw
         DISPLAYSURF.blit(background,(0,0))
+        statue.draw(DISPLAYSURF)
         maze.draw(DISPLAYSURF)
         draw_monster(timer.time, monsters)
         character.draw(DISPLAYSURF)
