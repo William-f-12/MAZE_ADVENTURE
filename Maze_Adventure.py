@@ -43,7 +43,7 @@ def play():
     maze = Maze(maze_list1)
     # player character
     character = Character(wizard, WINDOWWIDTH, WINDOWHEIGHT)
-    collide_time = 0
+    max_collide_time = 10
     # buff positions
     buff_pos_list = [(335, 20), (368, 20), (401, 20), (434, 20)]
     buff_pos_idx = 0
@@ -119,7 +119,7 @@ def play():
         monsters_move(monsters, character)
         # detect collision
         if maze.colliderect(character.rect):
-            collide_time += 1
+            character.collide_times += 1
             character.back_to_pre_location()
             dizzy.start(timer.time, character)
 
@@ -138,21 +138,11 @@ def play():
                 if chest._buff.img:
                     buff_pos_idx += 1
         # check statue
-        statue.update(DISPLAYSURF, collide_time, monsters, character)
+        statue.update(DISPLAYSURF, monsters, character)
         # check npc
         npc.react(character)
         # check items
         juice.react(character)
-        # check if game ends
-        if character.hp <= 0:
-            pygame.mixer.music.stop()
-            return "killed"
-        if monsters == []:
-            pygame.mixer.music.stop()
-            return "win"
-        if collide_time == 10:
-            pygame.mixer.music.stop()
-            return "injured"
 
         ## draw
         DISPLAYSURF.blit(background,(0,0))
@@ -167,17 +157,28 @@ def play():
         juice.draw(DISPLAYSURF)
         heiwu.draw(DISPLAYSURF, character)
         npc.draw_dialogue(DISPLAYSURF)
-        draw_HUD(character, collide_time)
+        draw_HUD(character)
         draw_buff_logo(chests)
 
         pygame.display.update()
         FPSCLOCK.tick(FPS)
         timer.count()
 
+        # check if game ends
+        if character.hp <= 0:
+            pygame.mixer.music.stop()
+            return "killed"
+        if monsters == []:
+            pygame.mixer.music.stop()
+            return "win"
+        if character.collide_times == max_collide_time:
+            pygame.mixer.music.stop()
+            return "injured"
 
-def draw_HUD(character, collide_time):
+
+def draw_HUD(character):
     show_health(character.hp)
-    show_collide_times(collide_time)
+    show_collide_times(character.collide_times)
 
 
 def show_collide_times(collide_time):

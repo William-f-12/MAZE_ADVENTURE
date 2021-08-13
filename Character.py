@@ -10,6 +10,7 @@ class Character:
         self.hp = c_info["hp"]
         self.atk = c_info["atk"]
         self.defense = c_info["defense"]
+        self.collide_times = 0
         self.inventory = []
         self.is_attack = False
         self.__face_direction = "left"

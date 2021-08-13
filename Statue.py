@@ -15,12 +15,12 @@ class Statue:
         self.can_bless = True
 
 
-    def update(self, screen, collide_time, monsters:list, character):
+    def update(self, screen, monsters:list, character):
         """check if player find the statue, and blessing the player"""
 
         if self._rect.colliderect(character.rect):
             self.is_found = True
-            self.blessing(screen, character, collide_time, monsters)
+            self.blessing(screen, character, monsters)
 
     
     def draw(self, screen):
@@ -30,12 +30,12 @@ class Statue:
             screen.blit(self._img, self._rect)
 
 
-    def blessing(self, screen, character, collide_time, monsters:list):
+    def blessing(self, screen, character, monsters:list):
         """blessing the character"""
 
         if self.can_bless:
             self.can_bless = False
-            res = random.randint(1, 10)
+            res = random.randint(1, 2)
             if res == 1:
                 screen.blit(self.blessing1,(0,0))
                 pygame.display.update()
@@ -48,7 +48,7 @@ class Statue:
                 pygame.display.update()
                 pygame.time.wait(3500)
                 character.atk = 1000
-                collide_time = 9
+                character.collide_times = 9
             else:
                 screen.blit(self.strange, (0,0))
                 pygame.display.update()
